@@ -203,9 +203,9 @@ export function Hero({ opened }) {
             {" "}
             invite you to be part of their forever{" "}
           </p>
-          <p className="mt-2 text-[0.72rem] font-medium tracking-[0.38em] uppercase text-ink/60">
+          {/* <p className="mt-2 text-[0.72rem] font-medium tracking-[0.38em] uppercase text-ink/60">
             {CONFIG.displayDate} · {heroLocation}
-          </p>
+          </p> */}
         </motion.div>
 
         {/* Arch gallery */}

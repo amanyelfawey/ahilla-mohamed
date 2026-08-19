@@ -10,7 +10,7 @@ export const CONFIG = {
   displayDate: 'Friday · 9 October 2026',
 
   music: {
-    src: '/music/our-song.mp3',
+    src: `${import.meta.env.BASE_URL}music/our-song.mp3`,
     fallbackToSynth: false,
   },
 
@@ -35,7 +35,7 @@ export const CONFIG = {
   },
 
   story: {
-    eyebrow: 'Our story',
+    eyebrow: '',
     title: 'Two hearts, one beautiful beginning',
     lead: 'Some loves are written quietly — in glances, in patience, in choosing each other again and again.',
     body: 'From the first hello to the promise of forever, every step of our journey has led us here. We found home in one another, and now we cannot wait to celebrate that love surrounded by the people who mean the most to us.',

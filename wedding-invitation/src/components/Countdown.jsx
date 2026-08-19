@@ -107,7 +107,6 @@ export function Countdown() {
                 <p className="font-script text-[clamp(2rem,7vw,3.2rem)] text-dusty-rose">Today, our forever begins</p>
               )}
 
-              <p className="mt-10 font-script text-[1.45rem] text-dusty-rose">{CONFIG.bride} &amp; {CONFIG.groom}</p>
               <p className="mt-2 text-[0.68rem] tracking-[0.28em] uppercase text-ink-faint">{CONFIG.displayDate}</p>
             </div>
           </div>

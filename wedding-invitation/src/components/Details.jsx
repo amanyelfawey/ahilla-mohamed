@@ -21,7 +21,7 @@ export function Details() {
         <h2 className="mt-3 font-heading text-[clamp(1.8rem,5vw,2.7rem)] font-normal text-ink">One celebration</h2>
         <Divider index={1} />
         <p className="mx-auto mb-10 max-w-[38ch] text-[0.94rem] text-ink-soft">
-          Ceremony and reception, together, in a hall in Maadi.
+          Join us at {CONFIG.venue.name}, {CONFIG.venue.area}, {CONFIG.venue.city}.
         </p>
       </Reveal>
 
@@ -64,8 +64,8 @@ export function Details() {
               >
                 <use href="#i-pin" />
               </motion.svg>
-              <p className="font-script text-[1.45rem] text-dusty-rose">{venue.name}</p>
-              <h3 className="mt-1 font-display text-[clamp(2.6rem,10vw,4.4rem)] font-light leading-none text-ink">
+              <p className="font-script text-[2rem] text-dusty-rose">{venue.name}</p>
+              <h3 className="mt-1 font-display text-[clamp(2.1rem,10vw,4.4rem)] font-light leading-none text-ink">
                 {venue.area}
               </h3>
               <p className="mt-2 text-[0.72rem] tracking-[0.38em] uppercase text-gold-deep">{venue.city}</p>
