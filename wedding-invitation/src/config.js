@@ -10,7 +10,7 @@ export const CONFIG = {
   displayDate: 'Friday · 9 October 2026',
 
   music: {
-    src: `${import.meta.env.BASE_URL}music/our-song.mp3`,
+    src: `${import.meta.env.BASE_URL}our-song.mp3`,
     fallbackToSynth: false,
   },
 
