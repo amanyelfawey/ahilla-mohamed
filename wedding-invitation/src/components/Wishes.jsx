@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { CONFIG } from '../config.js'
 import { cn } from '../lib/cn.js'
 import { Button, Card, Field, FormError, Section, controlClass } from './ui.jsx'
+import { Reveal } from './Motion.jsx'
 import { SectionHeading } from './Ornaments.jsx'
 
 export function Wishes({ items, onAdd }) {
@@ -34,7 +35,8 @@ export function Wishes({ items, onAdd }) {
         noteClassName="mb-9"
       />
 
-      <Card className="reveal mx-auto max-w-[560px]" data-delay="2">
+      <Reveal index={2} className="mx-auto max-w-[560px]">
+        <Card>
         <form id="wish-form" noValidate onSubmit={submit}>
           <Field label="Your name" htmlFor="wish-name">
             <input type="text" id="wish-name" placeholder="Your name" maxLength={60} autoComplete="name" required className={controlClass} />
@@ -45,7 +47,8 @@ export function Wishes({ items, onAdd }) {
           <FormError>{error}</FormError>
           <Button type="submit" wide>Leave a wish</Button>
         </form>
-      </Card>
+        </Card>
+      </Reveal>
 
       <div className="mt-[clamp(2rem,5vw,3rem)] grid grid-cols-[repeat(auto-fill,minmax(258px,1fr))] gap-[clamp(0.85rem,2.5vw,1.35rem)]" id="wishes">
         {all.map((wish, index) => (

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { CONFIG } from '../config.js'
 import { readStore, writeStore } from '../lib/storage.js'
 import { Button, Card, Field, FormError, Section, controlClass } from './ui.jsx'
+import { Reveal } from './Motion.jsx'
 import { SectionHeading } from './Ornaments.jsx'
 
 function successCopy(data, returning) {
@@ -66,7 +67,8 @@ export function Rsvp({ onWish }) {
         noteClassName="mb-10"
       />
 
-      <Card className="reveal reveal-scale rounded-[28px]" data-delay="2">
+      <Reveal variant="scale" index={2}>
+        <Card className="rounded-[28px]">
         {!done ? (
           <form id="rsvp-form" noValidate onSubmit={submit}>
             <Field label="Your name" htmlFor="rsvp-name">
@@ -125,7 +127,8 @@ export function Rsvp({ onWish }) {
             </button>
           </div>
         )}
-      </Card>
+        </Card>
+      </Reveal>
     </Section>
   )
 }

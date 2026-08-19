@@ -1,3 +1,5 @@
+import { Reveal } from './Motion.jsx'
+
 export function SvgSprites() {
   return (
     <svg width="0" height="0" style={{ position: 'absolute' }} aria-hidden="true" focusable="false">
@@ -128,16 +130,28 @@ export function SvgSprites() {
           <path d="M24 43s13-14 13-23A13 13 0 0 0 11 20c0 9 13 23 13 23z" fill="none" stroke="currentColor" strokeWidth="1.4" />
           <use href="#rose" x="14" y="10" width="20" height="20" />
         </symbol>
+
+        <symbol id="seal" viewBox="0 0 80 80">
+          <circle cx="40" cy="40" r="36" fill="url(#gGold)" />
+          <circle cx="40" cy="40" r="34" fill="none" stroke="#8F6E2E" strokeWidth="0.6" opacity="0.5" />
+          {Array.from({ length: 24 }, (_, i) => {
+            const angle = (i / 24) * Math.PI * 2
+            const cx = 40 + Math.cos(angle) * 34
+            const cy = 40 + Math.sin(angle) * 34
+            return <circle key={i} cx={cx} cy={cy} r="2.2" fill="#A88742" opacity="0.7" />
+          })}
+          <circle cx="40" cy="40" r="22" fill="none" stroke="#D4BC86" strokeWidth="0.8" opacity="0.45" />
+        </symbol>
       </defs>
     </svg>
   )
 }
 
-export function Divider({ className = 'reveal', delay = '1' }) {
+export function Divider({ className, index = 1 }) {
   return (
-    <div
-      className={`mx-auto my-5 mb-9 flex max-w-[260px] items-center justify-center gap-3.5 ${className}`.trim()}
-      data-delay={delay}
+    <Reveal
+      className={`mx-auto my-5 mb-9 flex max-w-[260px] items-center justify-center gap-3.5 ${className || ''}`.trim()}
+      index={index}
       aria-hidden="true"
     >
       <span className="h-px flex-1 bg-[linear-gradient(90deg,transparent,var(--color-gold-soft),transparent)]" />
@@ -145,7 +159,7 @@ export function Divider({ className = 'reveal', delay = '1' }) {
         <use href="#orn-leaf" />
       </svg>
       <span className="h-px flex-1 bg-[linear-gradient(90deg,transparent,var(--color-gold-soft),transparent)]" />
-    </div>
+    </Reveal>
   )
 }
 
@@ -168,13 +182,19 @@ export function FloralFrame({ position, parallax, sway = '', style, className = 
 export function SectionHeading({ eyebrow, title, note, noteClassName }) {
   return (
     <div className="text-center">
-      <p className="reveal font-body text-[0.68rem] font-normal tracking-[0.42em] uppercase text-gold-deep">{eyebrow}</p>
-      <h2 className="reveal font-heading text-[clamp(2rem,5.4vw,3.15rem)] font-normal leading-[1.18] tracking-[-0.005em] text-ink" data-delay="1">{title}</h2>
-      <Divider />
+      <Reveal index={0}>
+        <p className="font-body text-[0.68rem] font-normal tracking-[0.42em] uppercase text-gold-deep">{eyebrow}</p>
+      </Reveal>
+      <Reveal index={1}>
+        <h2 className="font-heading text-[clamp(2rem,5.4vw,3.15rem)] font-normal leading-[1.18] tracking-[-0.005em] text-ink">{title}</h2>
+      </Reveal>
+      <Divider index={1} />
       {note ? (
-        <p className={`reveal mx-auto max-w-[46ch] text-[0.94rem] text-ink-soft ${noteClassName || ''}`.trim()} data-delay="2">
-          {note}
-        </p>
+        <Reveal index={2}>
+          <p className={`mx-auto max-w-[46ch] text-[0.94rem] text-ink-soft ${noteClassName || ''}`.trim()}>
+            {note}
+          </p>
+        </Reveal>
       ) : null}
     </div>
   )

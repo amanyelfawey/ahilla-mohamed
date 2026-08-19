@@ -3,6 +3,7 @@ import { CONFIG } from '../config.js'
 import { cn } from '../lib/cn.js'
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion.js'
 import { Button, Card, Field, FormError, Section, controlClass } from './ui.jsx'
+import { Reveal } from './Motion.jsx'
 import { SectionHeading } from './Ornaments.jsx'
 
 function uploadRequest(body, onProgress) {
@@ -170,7 +171,8 @@ export function PhotoUpload() {
         noteClassName="mb-10"
       />
 
-      <Card className="reveal reveal-scale" data-delay="2">
+      <Reveal variant="scale" index={2}>
+        <Card>
         {!done ? (
           <form id="upload-form" noValidate onSubmit={send}>
             <div className="mb-7 text-center">
@@ -292,7 +294,8 @@ export function PhotoUpload() {
             </Button>
           </div>
         )}
-      </Card>
+        </Card>
+      </Reveal>
     </Section>
   )
 }

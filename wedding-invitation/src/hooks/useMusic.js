@@ -72,17 +72,35 @@ export function useMusic() {
     setState(true)
   }, [playSynth, setState])
 
+  useEffect(() => {
+    const audio = new Audio(CONFIG.music.src)
+    audio.loop = true
+    audio.preload = 'auto'
+    audio.volume = 0
+    audioRef.current = audio
+
+    return () => {
+      audio.pause()
+      if (audioRef.current === audio) audioRef.current = null
+    }
+  }, [])
+
   const start = useCallback(() => {
     if (startedRef.current) return
     startedRef.current = true
     setStarted(true)
 
-    const audio = new Audio(CONFIG.music.src)
-    audio.loop = true
-    audio.volume = 0
-    audioRef.current = audio
+    if (!audioRef.current) {
+      const created = new Audio(CONFIG.music.src)
+      created.loop = true
+      created.volume = 0
+      audioRef.current = created
+    }
 
-    audio.addEventListener(
+    const el = audioRef.current
+    el.volume = 0
+
+    el.addEventListener(
       'error',
       () => {
         if (!CONFIG.music.fallbackToSynth) {
@@ -94,7 +112,7 @@ export function useMusic() {
       { once: true },
     )
 
-    audio
+    el
       .play()
       .then(() => {
         setState(true)

@@ -1,3 +1,7 @@
+import couplePhoto from './assets/ahillamohamed.jpeg'
+import heroPhoto from './assets/newhero.jpeg'
+import portraitPhoto from './assets/us.jpeg'
+
 export const CONFIG = {
   bride: 'Ahilla',
   groom: 'Mohamed',
@@ -7,25 +11,35 @@ export const CONFIG = {
 
   music: {
     src: '/music/our-song.mp3',
-    fallbackToSynth: true,
+    fallbackToSynth: false,
   },
 
   venue: {
-    name: 'The Hall',
-    area: 'Maadi',
+    name: 'Royal Plaza Corniche',
+    area: 'El Maadi',
     city: 'Cairo',
     date: 'Friday, 9 October 2026',
-    time: '4:00 in the afternoon',
-    address: 'Maadi, Cairo',
-    mapQuery: 'Maadi, Cairo',
+    time: '8:00 PM to 12:00 AM',
+    address: 'Royal Plaza Corniche, El Maadi, Cairo',
+    mapQuery: 'Royal Plaza Corniche El Maadi Cairo',
+    mapLink:
+      'https://www.google.com/maps/place//data=!4m2!3m1!1s0x14584705b675461d:0x2561ca271438e469?entry=s&sa=X&ved=2ahUKEwjNks27t6yWAxWz97sIHalFGOUQ4kB6BAgWEAA&hl=en',
   },
 
   photos: {
-    /* Replace with /img/cover.jpg once their portrait is in public/img */
-    cover: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&h=2200&fit=crop&q=80',
-    hero: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=900&h=1200&fit=crop&q=80',
+    cover: couplePhoto,
+    hero: heroPhoto,
+    portrait: portraitPhoto,
     pair1: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=700&h=900&fit=crop&q=80',
     pair2: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=700&h=900&fit=crop&q=80',
+  },
+
+  story: {
+    eyebrow: 'Our story',
+    title: 'Two hearts, one beautiful beginning',
+    lead: 'Some loves are written quietly — in glances, in patience, in choosing each other again and again.',
+    body: 'From the first hello to the promise of forever, every step of our journey has led us here. We found home in one another, and now we cannot wait to celebrate that love surrounded by the people who mean the most to us.',
+    closing: 'Thank you for being part of the chapter we are about to begin.',
   },
 
   sections: {

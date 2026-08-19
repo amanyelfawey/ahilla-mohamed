@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { CONFIG } from '../config.js'
 import { Section } from './ui.jsx'
+import { Reveal } from './Motion.jsx'
 import { SectionHeading } from './Ornaments.jsx'
 
 function Photo({ src, alt, width, height }) {
@@ -34,7 +35,7 @@ export function CouplePhotos() {
       <SectionHeading eyebrow="The two of us" title="A love worth celebrating" />
 
       <div className="grid grid-cols-1 items-center gap-[clamp(1.5rem,4vw,2.5rem)] min-[700px]:grid-cols-[1.05fr_0.95fr]">
-        <div className="reveal reveal-scale" data-delay="1">
+        <Reveal variant="scale" index={1}>
           <figure className="relative mx-auto w-full max-w-[420px] p-3 before:absolute before:inset-0 before:rounded-[var(--radius-arch)] before:bg-[linear-gradient(120deg,var(--color-gold-deep),var(--color-gold-soft)_45%,var(--color-gold)_72%,var(--color-gold-deep))] before:opacity-55">
             <div className="relative aspect-[3/4] overflow-hidden rounded-[var(--radius-arch)] bg-[linear-gradient(150deg,var(--color-blush),var(--color-champagne))] shadow-lift">
               <Photo
@@ -46,9 +47,9 @@ export function CouplePhotos() {
             </div>
             <figcaption className="mt-3.5 text-center font-script text-[1.35rem] text-dusty-rose">{CONFIG.bride} & {CONFIG.groom}</figcaption>
           </figure>
-        </div>
+        </Reveal>
 
-        <div className="reveal reveal-right" data-delay="2">
+        <Reveal variant="right" index={2}>
           <div className="grid grid-cols-2 gap-[clamp(0.75rem,2.5vw,1.25rem)]">
             <div className="relative aspect-[3/4] overflow-hidden rounded-[140px_140px_12px_12px] border border-gold/28 bg-[linear-gradient(150deg,var(--color-lavender),var(--color-powder-blue))] shadow-soft">
               <Photo src={CONFIG.photos.pair1} alt="An engagement portrait" width={700} height={900} />
@@ -60,7 +61,7 @@ export function CouplePhotos() {
           <p className="mt-6 text-center text-[0.94rem] text-ink-soft">
             Two families, one story — and a day we have dreamt of sharing with you.
           </p>
-        </div>
+        </Reveal>
       </div>
     </Section>
   )

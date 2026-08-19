@@ -1,14 +1,14 @@
 import { useCallback, useState } from 'react'
 import { CONFIG } from '../config.js'
 import { readStore, writeStore } from '../lib/storage.js'
-import { cn } from '../lib/cn.js'
 import { useMusic } from '../hooks/useMusic.js'
-import { useReveal } from '../hooks/useReveal.js'
-import { useScrollEffects } from '../hooks/useScrollEffects.js'
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion.js'
 import { SvgSprites } from './Ornaments.jsx'
+import { Envelope } from './Envelope.jsx'
 import { MusicControl, PetalsCanvas } from './Experience.jsx'
+import { ScrollProgress } from './ScrollProgress.jsx'
 import { Hero } from './Hero.jsx'
+import { OurStory } from './OurStory.jsx'
 import { CouplePhotos } from './CouplePhotos.jsx'
 import { Countdown } from './Countdown.jsx'
 import { Details } from './Details.jsx'
@@ -22,9 +22,6 @@ export default function Invitation() {
   const [wishes, setWishes] = useState(() => readStore(CONFIG.storage.wishes, []))
   const music = useMusic()
   const prefersReduced = usePrefersReducedMotion()
-
-  useReveal(opened)
-  useScrollEffects(opened)
 
   const addWish = useCallback((name, text, silent = false) => {
     setWishes((current) => {
@@ -46,29 +43,24 @@ export default function Invitation() {
     }
   }, [prefersReduced])
 
+  const handleOpen = useCallback(() => {
+    music.start()
+    setOpened(true)
+  }, [music])
+
   return (
     <>
       <SvgSprites />
       <PetalsCanvas active />
-      <div
-        className={cn(
-          'progress pointer-events-none fixed top-0 left-0 z-[700] h-0.5 bg-[linear-gradient(120deg,var(--color-gold-deep),var(--color-gold-soft)_45%,var(--color-gold)_72%,var(--color-gold-deep))] transition-opacity duration-[600ms] ease-luxe',
-          opened ? 'opacity-[0.85]' : 'opacity-0',
-        )}
-        id="progress"
-        aria-hidden="true"
-      />
+      <ScrollProgress active={opened} />
       <MusicControl ready={opened} playing={music.playing} onToggle={music.toggle} />
 
-      <Hero
-        opened={opened}
-        onOpen={() => {
-          music.start()
-          setOpened(true)
-        }}
-      />
+      {!opened ? <Envelope onOpen={handleOpen} /> : null}
+
+      <Hero opened={opened} />
 
       <main id="story-flow" hidden={!opened}>
+        <OurStory />
         {CONFIG.sections.couplePhotos ? <CouplePhotos /> : null}
         <Countdown />
         <Details />

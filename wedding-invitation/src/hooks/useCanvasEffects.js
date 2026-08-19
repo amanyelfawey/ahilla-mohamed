@@ -4,6 +4,17 @@ import { usePrefersReducedMotion } from './usePrefersReducedMotion.js'
 const ROSE_COLORS = ['#C17B82', '#D4A0A5', '#B86B74', '#E4C4C8', '#9A5A62']
 const PETAL_COLORS = ['#C17B82', '#D8A8AD', '#B05C66', '#E8C9CE', '#A66A72']
 
+/** Module-level registry for one-shot petal bursts from Finale */
+let burstHandler = null
+
+export function registerPetalBurst(handler) {
+  burstHandler = handler
+}
+
+export function burstPetals(options = {}) {
+  burstHandler?.(options)
+}
+
 function drawBloom(ctx, flower) {
   ctx.save()
   ctx.translate(flower.x, flower.y)
@@ -57,6 +68,8 @@ function spawnBloom(w, h) {
     c: ROSE_COLORS[(Math.random() * ROSE_COLORS.length) | 0],
     center: '#F3E0D4',
     petals: 5 + ((Math.random() * 2) | 0),
+    burst: false,
+    life: 0,
   }
 }
 
@@ -72,6 +85,30 @@ function spawnPetal(w, h) {
     vr: (Math.random() - 0.5) * 0.03,
     a: 0.4 + Math.random() * 0.45,
     c: PETAL_COLORS[(Math.random() * PETAL_COLORS.length) | 0],
+    burst: false,
+    life: 0,
+  }
+}
+
+function spawnBurstParticle(origin, w, h) {
+  const angle = -Math.PI / 2 + (Math.random() - 0.5) * 1.4
+  const speed = 3 + Math.random() * 6
+  const isBloom = Math.random() < 0.35
+  const base = isBloom
+    ? spawnBloom(w, h)
+    : spawnPetal(w, h)
+
+  return {
+    ...base,
+    x: origin?.x ?? w * 0.5,
+    y: origin?.y ?? h * 0.85,
+    vx: Math.cos(angle) * speed + (Math.random() - 0.5) * 2,
+    vy: Math.sin(angle) * speed - 2,
+    burst: true,
+    life: 1,
+    decay: 0.008 + Math.random() * 0.012,
+    gravity: 0.12 + Math.random() * 0.08,
+    drag: 0.985,
   }
 }
 
@@ -103,7 +140,29 @@ export function usePetals(canvasRef, active) {
       ))
     }
 
+    const addBurst = ({ count = 40, origin } = {}) => {
+      const ox = origin?.x != null ? origin.x * w : w * 0.5
+      const oy = origin?.y != null ? origin.y * h : h * 0.85
+      for (let i = 0; i < count; i += 1) {
+        flowers.push(spawnBurstParticle({ x: ox, y: oy }, w, h))
+      }
+    }
+
+    registerPetalBurst(addBurst)
+
     const wrap = (item) => {
+      if (item.burst) {
+        item.vy += item.gravity
+        item.vx *= item.drag
+        item.vy *= item.drag
+        item.x += item.vx
+        item.y += item.vy
+        item.rot += item.vr
+        item.life -= item.decay
+        item.a = Math.max(0, item.life * 0.85)
+        return item.life > 0
+      }
+
       item.y += item.vy
       item.x += item.vx + Math.sin(item.y / 70) * 0.45
       item.rot += item.vr
@@ -113,15 +172,18 @@ export function usePetals(canvasRef, active) {
       }
       if (item.x < -28) item.x = w + 28
       if (item.x > w + 28) item.x = -28
+      return true
     }
 
     const frame = () => {
       if (!running) return
       ctx.clearRect(0, 0, w, h)
-      flowers.forEach((item) => {
-        wrap(item)
+      flowers = flowers.filter((item) => {
+        const alive = wrap(item)
+        if (!alive) return false
         if (item.kind === 'bloom') drawBloom(ctx, item)
         else drawPetal(ctx, item)
+        return true
       })
       ctx.globalAlpha = 1
       raf = requestAnimationFrame(frame)
@@ -140,6 +202,7 @@ export function usePetals(canvasRef, active) {
 
     return () => {
       running = false
+      registerPetalBurst(null)
       cancelAnimationFrame(raf)
       window.removeEventListener('resize', size)
       document.removeEventListener('visibilitychange', onVisibility)
