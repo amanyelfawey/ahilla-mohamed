@@ -6,4 +6,12 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
 
   base: "/ahilla-mohamed/",
+
+  server: {
+    open: "/ahilla-mohamed/",
+  },
+
+  preview: {
+    open: "/ahilla-mohamed/",
+  },
 });
