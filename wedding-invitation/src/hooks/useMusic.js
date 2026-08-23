@@ -8,13 +8,23 @@ export function useMusic() {
   const usingSynthRef = useRef(false)
   const startedRef = useRef(false)
   const playingRef = useRef(false)
+  const mutedRef = useRef(false)
   const [playing, setPlaying] = useState(false)
+  const [muted, setMuted] = useState(false)
   const [started, setStarted] = useState(false)
 
-  const setState = useCallback((on) => {
+  const TARGET_VOLUME = 0.55
+
+  const setPlayingState = useCallback((on) => {
     playingRef.current = on
     setPlaying(on)
   }, [])
+
+  const setMutedState = useCallback((on) => {
+    mutedRef.current = on
+    setMuted(on)
+    setPlayingState(!on)
+  }, [setPlayingState])
 
   const fadeTo = useCallback((target, ms) => {
     const el = audioRef.current
@@ -69,8 +79,8 @@ export function useMusic() {
     usingSynthRef.current = true
     audioRef.current = null
     playSynth()
-    setState(true)
-  }, [playSynth, setState])
+    setMutedState(false)
+  }, [playSynth, setMutedState])
 
   useEffect(() => {
     const audio = new Audio(CONFIG.music.src)
@@ -104,7 +114,7 @@ export function useMusic() {
       'error',
       () => {
         if (!CONFIG.music.fallbackToSynth) {
-          setState(false)
+          setMutedState(true)
           return
         }
         startSynth()
@@ -115,17 +125,17 @@ export function useMusic() {
     el
       .play()
       .then(() => {
-        setState(true)
-        fadeTo(0.55, 2600)
+        setMutedState(false)
+        fadeTo(TARGET_VOLUME, 2600)
       })
       .catch(() => {
         if (!CONFIG.music.fallbackToSynth) {
-          setState(false)
+          setMutedState(true)
           return
         }
         startSynth()
       })
-  }, [fadeTo, setState, startSynth])
+  }, [fadeTo, setMutedState, startSynth])
 
   const toggle = useCallback(() => {
     if (!startedRef.current) {
@@ -133,16 +143,30 @@ export function useMusic() {
       return
     }
 
-    if (playingRef.current) {
-      if (audioRef.current) audioRef.current.pause()
-      else stopSynth()
-      setState(false)
-    } else {
-      if (audioRef.current) audioRef.current.play().catch(() => {})
-      else playSynth()
-      setState(true)
+    if (usingSynthRef.current) {
+      if (playingRef.current) {
+        stopSynth()
+        setMutedState(true)
+      } else {
+        playSynth()
+        setMutedState(false)
+      }
+      return
     }
-  }, [playSynth, setState, start, stopSynth])
+
+    const el = audioRef.current
+    if (!el) return
+
+    if (mutedRef.current) {
+      el.play().catch(() => {})
+      fadeTo(TARGET_VOLUME, 500)
+      setMutedState(false)
+      return
+    }
+
+    fadeTo(0, 500)
+    setMutedState(true)
+  }, [fadeTo, playSynth, setMutedState, start, stopSynth])
 
   useEffect(() => {
     return () => {
@@ -155,5 +179,5 @@ export function useMusic() {
     }
   }, [stopSynth])
 
-  return { playing, started, start, toggle }
+  return { playing, muted, started, start, toggle }
 }

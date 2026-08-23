@@ -6,7 +6,6 @@ import {
   useSpring,
   useTransform,
 } from "motion/react";
-import { CONFIG } from "../config.js";
 import { EASE_LUXE, SPRING_SOFT } from "../lib/motion.js";
 
 import photo1 from "../assets/1.jpeg";
@@ -69,9 +68,6 @@ function KineticHeadline({ text, opened, reduced, baseDelay = 0 }) {
 export function Hero({ opened }) {
   const ref = useRef(null);
   const reduced = useReducedMotion();
-
-  // Config stores "El Maadi"; the cover reads better as "Al-Maadi".
-  const heroLocation = `${CONFIG.venue.name} · ${CONFIG.venue.area.replace(/^El\s+/i, "Al-")}`;
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -203,9 +199,6 @@ export function Hero({ opened }) {
             {" "}
             invite you to be part of their forever{" "}
           </p>
-          {/* <p className="mt-2 text-[0.72rem] font-medium tracking-[0.38em] uppercase text-ink/60">
-            {CONFIG.displayDate} · {heroLocation}
-          </p> */}
         </motion.div>
 
         {/* Arch gallery */}
